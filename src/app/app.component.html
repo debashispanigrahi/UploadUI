@@ -1,0 +1,10 @@
+<div class="form-group">
+  <div>
+    <label for="file">Choose File</label>
+  </div>
+
+  <input type="file" id="file" (change)="handleFileInput($event)">
+</div>
+<div class="btn">
+  <button (click)="Upload()">Upload</button>
+</div>
