@@ -28,22 +28,38 @@ export class AppComponent {
       reader.onload = () => {
         const byteArray = new Uint8Array(reader.result as ArrayBuffer);
 
-        var myBytes = Array.from(byteArray);
+        const byteLength = 52428800;
+
+        // Calculate the number of byte arrays that will be created
+        const numArrays = Math.ceil(byteArray.length / byteLength);
+
+        // Initialize an array to hold the new byte arrays
+        const newArray = new Array(numArrays);
+
+        // Loop through the original array and create new byte arrays
+        for (let i = 0; i < numArrays; i++) {
+          const start = i * byteLength;
+          const end = start + byteLength;
+          newArray[i] = byteArray.slice(start, end);
+        }
+
+        //var myBytes = Array.from(byteArray);
 
         let data = {
-          FileBytes: myBytes,
+          FileBytes: newArray,
           FileName: FileName
         };
-        let FileData = {
-          FileData: JSON.stringify(data)
-        };
-        console.log(FileData);
-        this.postData(FileData).subscribe(res => {
+        // let FileData = {
+        //   FileData: JSON.stringify(data)
+        // };
+        //console.log(FileData);
+        this.postData(data).subscribe(res => {
           alert(res);
         },
           err => {
             alert(err)
           });
+
       }; reader.readAsArrayBuffer(file);
       (<HTMLInputElement>document.getElementById("file")).value = "";
     }
